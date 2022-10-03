@@ -29,13 +29,6 @@ export class TodosAccess {
         }, (err) => { 
             treatError(err) 
         }).promise()
-    //   const result = await this.docClient.scan({
-    //     TableName: this.todosTable,
-    //     FilterExpression: 'userId = :id',
-    //     ExpressionAttributeValues : {':id' : userId}
-    //     }, (err) => { 
-    //       treatError(err) 
-    //     }).promise()
       logger.info("Operation terminated");
       const items = res.Items
       return items as TodoItem[]
