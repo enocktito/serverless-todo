@@ -21,15 +21,23 @@ export class TodosAccess {
   
     async getTodosForUser(userId:string): Promise<TodoItem[]> {
       logger.info("Scanning Dynamodb table");
-      const result = await this.docClient.scan({
+      const res = await this.docClient.query({
         TableName: this.todosTable,
-        FilterExpression: 'userId = :id',
+        IndexName: process.env.TODOS_CREATED_AT_INDEX,
+        KeyConditionExpression: 'userId = :id',
         ExpressionAttributeValues : {':id' : userId}
-      }, (err) => { 
-          treatError(err) 
-      }).promise()
+        }, (err) => { 
+            treatError(err) 
+        }).promise()
+    //   const result = await this.docClient.scan({
+    //     TableName: this.todosTable,
+    //     FilterExpression: 'userId = :id',
+    //     ExpressionAttributeValues : {':id' : userId}
+    //     }, (err) => { 
+    //       treatError(err) 
+    //     }).promise()
       logger.info("Operation terminated");
-      const items = result.Items
+      const items = res.Items
       return items as TodoItem[]
     }
 

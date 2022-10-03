@@ -10,6 +10,7 @@ import * as uuid from 'uuid'
 // TODO: Implement businessLogic
 const todosAccess = new TodosAccess();
 const attachmentUtils = new AttachmentUtils();
+const bucketName = process.env.ATTACHMENT_S3_BUCKET;
 const logger = createLogger('Todo')
 
 export async function getTodosForUser(userId:string): Promise<TodoItem[]> {
@@ -23,14 +24,15 @@ export async function createTodo(
   ) {
     logger.info("Creating todo: " + createTodoRequest + " for user " + userId);
     const todoId = uuid.v4();
-    // const attachmentUrl = 'none';
+    const attachmentUrl = `https://${bucketName}.s3.amazonaws.com/${todoId}`;
     const todo = {
       todoId: todoId,
       userId: userId,
       createdAt: new Date().toISOString(),
       name: createTodoRequest.name,
       dueDate: createTodoRequest.dueDate,
-      done: false
+      done: false,
+      attachmentUrl: attachmentUrl
     };
     return await todosAccess.createTodo(todo);
   }

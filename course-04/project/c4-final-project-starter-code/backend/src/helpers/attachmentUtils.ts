@@ -1,7 +1,10 @@
 import * as AWS from 'aws-sdk'
 import * as AWSXRay from 'aws-xray-sdk'
+import { createLogger } from '../utils/logger'
+
 
 const XAWS = AWSXRay.captureAWS(AWS)
+const logger = createLogger("AttachmentUtils");
 
 // TODO: Implement the fileStogare logic
 
@@ -13,12 +16,14 @@ export class AttachmentUtils {
         private readonly urlExpiration = process.env.SIGNED_URL_EXPIRATION) {
     }
  
-    async getUploadUrl(todoId: string) {
-        return this.s3.getSignedUrl('putObject', {
+    getUploadUrl(todoId: string): string {
+        const url: string = this.s3.getSignedUrl('putObject', {
             Bucket: this.bucketName,
             Key: todoId,
             Expires: this.urlExpiration
         })
+        logger.info("The url is: " + url );
+        return url 
     }
     
 
