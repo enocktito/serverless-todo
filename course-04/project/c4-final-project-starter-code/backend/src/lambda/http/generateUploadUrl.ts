@@ -11,16 +11,18 @@ export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const todoId = event.pathParameters.todoId
     // TODO: Return a presigned URL to upload a file for a TODO item with the provided id
-    const attachmentPresignedUrl = createAttachmentPresignedUrl(todoId);
-    const res = "{\"uploadUrl\":" +  "\"" + attachmentPresignedUrl + "\"" + "}"
+    const res = createAttachmentPresignedUrl(todoId);
+    // const res = "{\"uploadUrl\":" +  "\"" + attachmentPresignedUrl + "\"" + "}"
 
     return {
-        statusCode: 200,
+        statusCode: res.statusCode,
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Credentials': true
         },
-        body: res
+        body: JSON.stringify({
+            uploadUrl: res.body
+        })
     }
   }
 )

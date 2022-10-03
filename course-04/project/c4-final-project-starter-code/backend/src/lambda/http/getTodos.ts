@@ -13,16 +13,16 @@ export const handler = middy(
     // Write your code here
     console.log(event);
     const userId = getUserId(event);
-    const items = await getTodosForUser(userId);
+    const res = await getTodosForUser(userId);
 
     return {
-        statusCode: 200,
+        statusCode: res.statusCode,
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Credentials': true
         },
         body: JSON.stringify({
-            items
+            items: res.body
         })
     }
   }

@@ -3,8 +3,7 @@ import * as AWSXRay from 'aws-xray-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { createLogger } from '../utils/logger'
 import { TodoItem } from '../models/TodoItem'
-// import { bool } from 'aws-sdk/clients/signer'
-// import { TodoUpdate } from '../models/TodoUpdate';
+import { TodoUpdate } from '../models/TodoUpdate';
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest';
 
 const XAWS = AWSXRay.captureAWS(AWS)
@@ -60,7 +59,7 @@ export class TodosAccess {
         return ''
     }
 
-    async updateTodo(updateTodoRequest: UpdateTodoRequest,todoId: string, userId: string): Promise<string>  {
+    async updateTodo(updateTodoRequest: UpdateTodoRequest,todoId: string, userId: string): Promise<TodoUpdate>  {
         logger.info("Updating Item in Dynamodb table");
         await this.docClient.update({
             TableName: this.todosTable,
@@ -82,8 +81,10 @@ export class TodosAccess {
         }, (err) => { 
             treatError(err) 
         }).promise()
-        logger.info("Operation terminated");
-        return ''
+        
+        logger.info("Operation terminated ");
+
+        return updateTodoRequest;
     }
 
 }

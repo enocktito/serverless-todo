@@ -12,15 +12,15 @@ export const handler = middy(
     const todoId = event.pathParameters.todoId
     // TODO: Remove a TODO item by id
     const userId = getUserId(event);
-    await deleteTodo(todoId,userId);
+    const res = await deleteTodo(todoId,userId);
 
     return  {
-        statusCode: 200,
+        statusCode: res.statusCode,
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Credentials': true
         },
-        body: ''
+        body: res.body
     }
   }
 )
