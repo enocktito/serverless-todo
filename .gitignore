@@ -36,4 +36,3 @@ node_modules
 venv/
 .vscode
 course-04/project/c4-final-project-starter-code/backend/lib/
-token
